@@ -12,6 +12,8 @@ public class TowerDefenseProject : ModuleRules
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
+        PrivateIncludePaths.AddRange(new string[] { "TowerDefenseProject" });
+
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
 		
