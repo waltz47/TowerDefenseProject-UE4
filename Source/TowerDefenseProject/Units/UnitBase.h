@@ -26,6 +26,7 @@ enum UnitState
 	UNIT_NONE,
 	UNIT_IDLE,
 	UNIT_PLACING,
+	UNIT_AIMING,
 	UNIT_ATTACKING
 };
 
@@ -53,6 +54,8 @@ public:
 
 	FUnitStats m_unitStats;
 	UnitState m_unitState;;
+	float m_gameTime = 0.f;
+	float m_lastAttackTime = -100.f;
 
 	virtual float TakeDamage(float dmg, struct FDamageEvent const &dmgEvent, AController* Damageinstigator, AActor* causer) override;
 	virtual void DestroyUnit();

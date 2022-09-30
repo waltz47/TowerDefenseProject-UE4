@@ -4,6 +4,12 @@
 #include "Lib.h"
 #include "engine/world.h"
 #include "containers/array.h"
+#include "kismet/gameplaystatics.h"
+#include "kismet/kismetmathlibrary.h"
+#include "engine/world.h"
+
+#define AI_TEAM "t_ai"
+#define PLAYER_TEAM "t_player"
 
 bool ULib::fValid(AActor* actor)
 {
@@ -67,4 +73,52 @@ bool ULib::GroundSlopeCheck(const UObject* WorldContextObject, const FVector& lo
 		}
 	}
 	return true;
+}
+void ULib::SetActorTeam(AActor* actor, bool playerTeam)
+{
+	if (!fValid(actor))
+	{
+		return;
+	}
+	if (playerTeam)
+	{
+		actor->Tags.Add(PLAYER_TEAM);
+		actor->Tags.Remove(AI_TEAM);
+	}
+	else
+	{
+		actor->Tags.Remove(PLAYER_TEAM);
+		actor->Tags.Add(AI_TEAM);
+	}
+}
+TArray<AActor*> ULib::GetNearbyActors(UWorld* world, const FVector& origin, float radius, bool playerTeam)
+{
+	if (world == nullptr)
+	{
+		return {};
+	}
+	TArray<TEnumAsByte<EObjectTypeQuery>> TraceObjectTypes;
+	TraceObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
+	TraceObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Camera));
+	TraceObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_WorldStatic));
+	TArray<AActor*> IgnoredActors;
+	TArray<AActor*> overlappingActors;
+	UKismetSystemLibrary::SphereOverlapActors(world, origin, radius, TraceObjectTypes, AActor::StaticClass(), IgnoredActors, overlappingActors);
+	FName check;
+	if (playerTeam) check = FName(PLAYER_TEAM);
+	else check = FName(AI_TEAM);
+	TArray<AActor*> ret;
+	for (AActor* actor : overlappingActors) {
+		if (!fValid(actor)) continue;
+		if (actor->ActorHasTag(check)) {
+			ret.Add(actor);
+		}
+		//UE_LOG(LogTemp, Warning, TEXT("name: %s"), *actor->GetName());
+	}
+	return ret;
+}
+bool ULib::IsPlayerTeam(AActor* actor)
+{
+	if (!fValid(actor)) return false;
+	return actor->ActorHasTag(PLAYER_TEAM);
 }

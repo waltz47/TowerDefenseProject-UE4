@@ -40,6 +40,7 @@ void AUnitBase::BeginPlay()
 void AUnitBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	m_gameTime += DeltaTime;
 	if (GetState() == UNIT_NONE)
 	{
 		return;

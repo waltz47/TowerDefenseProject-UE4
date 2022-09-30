@@ -17,4 +17,7 @@ public:
 	static bool fValid(AActor* actor);
 	static void fDestroy(const UObject* WorldContextObject, AActor* actor);
 	static bool GroundSlopeCheck(const UObject* WorldContextObject, const FVector& location, int radius = 100.f, float tolerance = 50.f);
+	UFUNCTION(BlueprintCallable) static void SetActorTeam(AActor* actor, bool player);
+	static TArray<AActor*> GetNearbyActors(UWorld* world, const FVector& origin, float radius, bool playerTeam);
+	static bool IsPlayerTeam(AActor* actor);
 };
