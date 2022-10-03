@@ -13,7 +13,7 @@
 
 bool ULib::fValid(AActor* actor)
 {
-	if (actor == nullptr) {
+	if (!actor) {
 		return false;
 	}
 	if (!actor->IsValidLowLevel())

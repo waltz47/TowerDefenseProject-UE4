@@ -3,6 +3,7 @@
 
 #include "Units/Shooter.h"
 #include "lib.h"
+#include "drawdebughelpers.h"
 
 #define TURRET_ROTATION_SPEED 0.2f
 #define TURRET_LOOK_AT_TOLERANCE 15.f
@@ -23,14 +24,11 @@ void AShooter::BeginPlay()
 void AShooter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (GetState() == UNIT_NONE)
+	if (GetState() == UNIT_NONE || GetState() == UNIT_PLACING)
 	{
 		return;
 	}
-	if (!ValidTarget(GetTarget())) {
-		SetTarget(nullptr);
-		SetState(UNIT_IDLE);
-	}
+	
 	switch (GetState())
 	{
 		case UNIT_NONE:
@@ -43,6 +41,11 @@ void AShooter::Tick(float DeltaTime)
 		}
 		case UNIT_AIMING:
 		{
+			if (!ULib::fValid(GetTarget()))
+			{
+				SetState(UNIT_IDLE);
+				break;
+			}
 			FRotator currTurretRot = turretMesh->GetComponentRotation();
 			FRotator lookAtTarget = (GetTarget()->GetActorLocation() - turretMesh->GetComponentLocation()).Rotation();
 			FRotator lerpedRot = FMath::Lerp(turretMesh->GetComponentRotation(), lookAtTarget, TURRET_ROTATION_SPEED);
@@ -56,7 +59,13 @@ void AShooter::Tick(float DeltaTime)
 		}
 		case UNIT_ATTACKING:
 		{
-
+			
+			if (m_gameTime - m_lastAttackTime >= m_unitStats.attackRate)
+			{
+				Fire();
+			}
+			SetState(UNIT_AIMING);
+			break;
 		}
 		default:
 			break;
@@ -87,4 +96,21 @@ AActor* AShooter::FindNewTarget()
 		}
 	}
 	return prospectActor;
+}
+void AShooter::Fire()
+{
+	if (!ULib::fValid(GetTarget()))
+	{
+		SetState(UNIT_IDLE);
+		UE_LOG(LogTemp, Warning, TEXT("Invalid target in single frame"));
+		return;
+	}
+	DrawDebugLine(GetWorld(),
+		GetActorLocation(),
+		GetTarget()->GetActorLocation(),
+		FColor::Red,
+		false,
+		0.2f
+	);
+	m_lastAttackTime = m_gameTime;
 }

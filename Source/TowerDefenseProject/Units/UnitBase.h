@@ -14,8 +14,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) float health = 100.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) float maxHealth = 100.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) float damage = 10.f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) float attackRate = 100.f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite) float attackRange = 100.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite) float attackRate = 2.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite) float attackRange = 1500.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) float gold = 10.f;
 
 };
@@ -52,10 +52,9 @@ public:
 
 	UPROPERTY() class  ATDPlayer* m_tdPlayer = nullptr;
 
-	FUnitStats m_unitStats;
-	UnitState m_unitState;;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite) FUnitStats m_unitStats;
+	UnitState m_unitState = UNIT_IDLE;
 	float m_gameTime = 0.f;
-	float m_lastAttackTime = -100.f;
 
 	virtual float TakeDamage(float dmg, struct FDamageEvent const &dmgEvent, AController* Damageinstigator, AActor* causer) override;
 	virtual void DestroyUnit();

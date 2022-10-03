@@ -28,9 +28,11 @@ public:
 	UPROPERTY(VisibleAnywhere) class UStaticMeshComponent* turretMesh = nullptr;
 
 	UPROPERTY() AActor* targetActor = nullptr;
-	
+	float m_lastAttackTime = -100.f;
+
 	AActor* GetTarget() { return targetActor; }
 	void SetTarget(AActor* newTarget) { targetActor = newTarget; }
 	bool ValidTarget(AActor* actor);
 	AActor* FindNewTarget();
+	virtual void Fire();
 };
