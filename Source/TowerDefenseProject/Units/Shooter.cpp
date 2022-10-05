@@ -79,7 +79,7 @@ bool AShooter::ValidTarget(AActor* actor)
 }
 AActor* AShooter::FindNewTarget()
 {
-	TArray<AActor*> prospect = ULib::GetNearbyActors(GetWorld(), GetActorLocation(), m_unitStats.attackRange, ULib::IsPlayerTeam(this));
+	TArray<AActor*> prospect = ULib::GetNearbyActors(GetWorld(), GetActorLocation(), m_unitStats.attackRange, false);
 	float currentFarthest = 2e9;
 	AActor* prospectActor = nullptr;	
 	for (AActor* actor : prospect)

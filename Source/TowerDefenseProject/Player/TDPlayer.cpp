@@ -32,7 +32,7 @@ ATDPlayer::ATDPlayer()
 void ATDPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	ULib::SetActorTeam(this, true);
 }
 
 // Called every frame

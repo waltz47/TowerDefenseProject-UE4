@@ -29,6 +29,7 @@ AUnitBase::AUnitBase()
 void AUnitBase::BeginPlay()
 {
 	Super::BeginPlay();
+	ULib::SetActorTeam(this, true);
 	m_tdPlayer = Cast<ATDPlayer>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	if (m_tdPlayer == nullptr)
 	{

@@ -20,6 +20,10 @@ bool ULib::fValid(AActor* actor)
 	{
 		return false;
 	}
+	if (actor->IsPendingKill())
+	{
+		return false;
+	}
 	return true;
 }
 void ULib::fDestroy(const UObject* WorldContextObject, AActor* actor)
@@ -97,25 +101,19 @@ TArray<AActor*> ULib::GetNearbyActors(UWorld* world, const FVector& origin, floa
 	{
 		return {};
 	}
-	TArray<TEnumAsByte<EObjectTypeQuery>> TraceObjectTypes;
-	TraceObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
-	TraceObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Camera));
-	TraceObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_WorldStatic));
-	TArray<AActor*> IgnoredActors;
-	TArray<AActor*> overlappingActors;
-	UKismetSystemLibrary::SphereOverlapActors(world, origin, radius, TraceObjectTypes, AActor::StaticClass(), IgnoredActors, overlappingActors);
-	FName check;
-	if (playerTeam) check = FName(PLAYER_TEAM);
-	else check = FName(AI_TEAM);
 	TArray<AActor*> ret;
-	for (AActor* actor : overlappingActors) {
+	UGameplayStatics::GetAllActorsWithTag(world, playerTeam ? PLAYER_TEAM : AI_TEAM, ret);
+	TArray<AActor*> gv;
+	for (AActor* actor : ret)
+	{
 		if (!fValid(actor)) continue;
-		if (actor->ActorHasTag(check)) {
-			ret.Add(actor);
+		float dst = (actor->GetActorLocation() - origin).Size();
+		if (dst <= radius)
+		{
+			gv.Add(actor);
 		}
-		//UE_LOG(LogTemp, Warning, TEXT("name: %s"), *actor->GetName());
 	}
-	return ret;
+	return gv; 
 }
 bool ULib::IsPlayerTeam(AActor* actor)
 {
