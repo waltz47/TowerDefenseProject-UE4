@@ -30,6 +30,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats") float maxHealth = 100.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats") float damage = 100.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats") float armor = 10.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats") float maxWalkSpeed = 500.f;
 	
 	UPROPERTY() AActor* target = nullptr;
 	UFUNCTION(BlueprintCallable) AActor* GetTarget() { return target; }
@@ -37,4 +38,8 @@ public:
 	void Search();
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void RF_Blueprint();
+
+	FTimerHandle slowTimerHandle;
+	void ApplyEffectSlow(float factor, float duration);
+	void UndoEffectSlow();
 };

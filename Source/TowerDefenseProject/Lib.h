@@ -14,7 +14,7 @@ class TOWERDEFENSEPROJECT_API ULib : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 public:
-	static bool fValid(AActor* actor);
+	static bool fValid(const UObject* actor);
 	static void fDestroy(const UObject* WorldContextObject, AActor* actor);
 	static bool GroundSlopeCheck(const UObject* WorldContextObject, const FVector& location, int radius = 100.f, float tolerance = 50.f);
 	UFUNCTION(BlueprintCallable) static void SetActorTeam(AActor* actor, bool player);

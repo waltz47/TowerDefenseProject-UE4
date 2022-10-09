@@ -2,6 +2,10 @@
 
 
 #include "Units/Slower.h"
+#include "lib.h"
+#include "gameframework/character.h"
+#include "gameframework/charactermovementcomponent.h"
+#include "enemy/enemy.h"
 
 ASlower::ASlower()
 {
@@ -18,4 +22,15 @@ void ASlower::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+void ASlower::Fire()
+{
+	Super::Fire();
+	if (!ULib::fValid(GetTarget())) return;
+	AEnemy* character = Cast<AEnemy>(GetTarget());
+	if (!ULib::fValid(character)) return;
+	if (m_unitStats.slowFactor > 0.f)
+	{
+		character->ApplyEffectSlow(m_unitStats.slowFactor, m_unitStats.slowDuration);
+	}
 }

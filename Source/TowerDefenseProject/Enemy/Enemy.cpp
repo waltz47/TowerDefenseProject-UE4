@@ -9,6 +9,9 @@
 #include "aicontroller.h"
 #include "AI/NavigationSystemBase.h"
 #include "navigationpath.h"
+#include "engine/world.h"
+#include "gameframework/charactermovementcomponent.h"
+
 // Sets default values
 AEnemy::AEnemy()
 {
@@ -22,6 +25,8 @@ AEnemy::AEnemy()
 	camera->SetupAttachment(cameraBoom);
 
 	health = maxHealth;
+
+	if (GetCharacterMovement()) GetCharacterMovement()->MaxWalkSpeed = maxWalkSpeed;
 }
 
 // Called when the game starts or when spawned
@@ -40,6 +45,7 @@ void AEnemy::Tick(float DeltaTime)
 
 void AEnemy::Search()
 {
+	//INV
 	if (ULib::fValid(target)) return;
 	UNavigationSystemV1* NavArea = FNavigationSystem::GetCurrent<UNavigationSystemV1>(this);
 	if (NavArea == nullptr)
@@ -81,4 +87,16 @@ float AEnemy::TakeDamage(float dmg, struct FDamageEvent const &dmgEvent, AContro
 		ULib::fDestroy(GetWorld(), this);
 	}
 	return dmg;
+}
+void AEnemy::ApplyEffectSlow(float factor, float duration)
+{
+	if (GetWorld()->GetTimerManager().IsTimerActive(slowTimerHandle) == false)
+	{
+		GetCharacterMovement()->MaxWalkSpeed /= factor;
+	}
+	GetWorld()->GetTimerManager().SetTimer(slowTimerHandle, this, &AEnemy::UndoEffectSlow, duration, false);
+}
+void AEnemy::UndoEffectSlow()
+{
+	GetCharacterMovement()->MaxWalkSpeed = maxWalkSpeed;
 }

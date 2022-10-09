@@ -16,6 +16,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) float damage = 10.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) float attackRate = 2.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) float attackRange = 1500.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite) float slowFactor = 2.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite) float slowDuration = 1.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) float gold = 10.f;
 
 };

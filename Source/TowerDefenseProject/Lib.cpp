@@ -11,7 +11,7 @@
 #define AI_TEAM "t_ai"
 #define PLAYER_TEAM "t_player"
 
-bool ULib::fValid(AActor* actor)
+bool ULib::fValid(const UObject* actor)
 {
 	if (!actor) {
 		return false;

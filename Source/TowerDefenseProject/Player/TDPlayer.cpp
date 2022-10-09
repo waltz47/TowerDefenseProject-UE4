@@ -11,6 +11,7 @@
 #include "drawdebughelpers.h"
 
 #define MIN_DIST_TO_PLAYER 100.f
+#define MAX_DIST_TO_PLAYER 1000.f
 #define GROUND_RADIUS_TO_BUILD 60.f
 
 // Sets default values
@@ -80,8 +81,8 @@ void ATDPlayer::Tick(float DeltaTime)
 	}
 	DrawDebugLine(GetWorld(), eyeLocation, endLoc, FColor::Green);
 	FVector location = hit.Location;
-	float distToPlayer = (GetActorLocation() - location).Size();
-	if (distToPlayer < MIN_DIST_TO_PLAYER)
+	float distToPlayer = FVector::Distance(GetActorLocation(), location);
+	if (distToPlayer < MIN_DIST_TO_PLAYER || distToPlayer > MAX_DIST_TO_PLAYER)
 	{
 		m_placeable = 0;
 		return;
