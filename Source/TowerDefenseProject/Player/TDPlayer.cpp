@@ -141,6 +141,7 @@ void ATDPlayer::LeftMouseEval()
 			return;
 		}
 		else {
+			UE_LOG(LogTemp, Warning, TEXT("Destroyed %s"), *m_placingUnit->GetName());
 			ULib::fDestroy(GetWorld(), m_placingUnit);
 			return;
 		}

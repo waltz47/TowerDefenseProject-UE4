@@ -11,6 +11,7 @@
 #include "navigationpath.h"
 #include "engine/world.h"
 #include "gameframework/charactermovementcomponent.h"
+#include "kismet/gameplaystatics.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -18,11 +19,11 @@ AEnemy::AEnemy()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	cameraBoom = CreateDefaultSubobject<USpringArmComponent>("Camera Boom");
+	/*cameraBoom = CreateDefaultSubobject<USpringArmComponent>("Camera Boom");
 	cameraBoom->SetupAttachment(GetMesh());
 
 	camera = CreateDefaultSubobject<UCameraComponent>("Camera");
-	camera->SetupAttachment(cameraBoom);
+	camera->SetupAttachment(cameraBoom);*/
 
 	health = maxHealth;
 
@@ -43,41 +44,6 @@ void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);}
 
-void AEnemy::Search()
-{
-	//INV
-	if (ULib::fValid(target)) return;
-	UNavigationSystemV1* NavArea = FNavigationSystem::GetCurrent<UNavigationSystemV1>(this);
-	if (NavArea == nullptr)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Null NavArea"));
-		return;
-	}
-	TArray<AActor*> p = ULib::GetNearbyActors(GetWorld(), GetActorLocation(), 1000.f, 1);
-	for (AActor* actor : p)
-	{
-		if (!ULib::fValid(actor))
-		{
-			continue;
-		}
-		UNavigationPath* path = NavArea->FindPathToLocationSynchronously(this, GetActorLocation(), actor->GetActorLocation(),
-			actor);
-		float maxCost = 2e9;
-		if (path && path->IsValid())
-		{
-			float cost = path->GetPathLength();
-			if (cost < maxCost)
-			{
-				maxCost = cost;
-				target = actor;
-			}
-		}
-	}
-	if (ULib::fValid(target))
-	{
-		RF_Blueprint();
-	}
-}
 float AEnemy::TakeDamage(float dmg, struct FDamageEvent const &dmgEvent, AController* Damageinstigator, AActor* causer)
 {
 	dmg = Super::TakeDamage(dmg, dmgEvent, Damageinstigator, causer);
@@ -99,4 +65,10 @@ void AEnemy::ApplyEffectSlow(float factor, float duration)
 void AEnemy::UndoEffectSlow()
 {
 	GetCharacterMovement()->MaxWalkSpeed = maxWalkSpeed;
+}
+void AEnemy::Attack(AActor* target)
+{
+	if (!ULib::fValid(target))
+		return;
+	UGameplayStatics::ApplyDamage(target, damage, nullptr, nullptr, UDamageType::StaticClass());
 }
