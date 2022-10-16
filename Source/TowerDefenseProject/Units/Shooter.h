@@ -25,7 +25,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(VisibleAnywhere) class UStaticMeshComponent* turretMesh = nullptr;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly) class USkeletalMeshComponent* turretMesh = nullptr;
 
 	UPROPERTY() AActor* targetActor = nullptr;
 	float m_lastAttackTime = -100.f;

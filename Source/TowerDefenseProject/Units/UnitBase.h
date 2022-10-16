@@ -50,7 +50,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(VisibleAnywhere) class USceneComponent* rootScene = nullptr;
-	UPROPERTY(VisibleAnywhere) class UStaticMeshComponent* baseMesh = nullptr;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly) class USkeletalMeshComponent* baseMesh = nullptr;
 
 	UPROPERTY() class  ATDPlayer* m_tdPlayer = nullptr;
 

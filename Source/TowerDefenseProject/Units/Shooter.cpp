@@ -12,7 +12,7 @@ AShooter::AShooter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	turretMesh = CreateDefaultSubobject<UStaticMeshComponent>("Turret Mesh");
+	turretMesh = CreateDefaultSubobject<USkeletalMeshComponent>("Turret Mesh");
 	turretMesh->SetupAttachment(baseMesh);
 }
 

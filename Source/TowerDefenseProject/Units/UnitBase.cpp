@@ -8,6 +8,7 @@
 #include "kismet/gameplaystatics.h"
 #include "player/tdplayer.h"
 #include "kismet/kismetmathlibrary.h"
+#include "components/skeletalmeshcomponent.h"
 
 // Sets default values
 AUnitBase::AUnitBase()
@@ -18,7 +19,7 @@ AUnitBase::AUnitBase()
 	rootScene = CreateDefaultSubobject<USceneComponent>("Root Scene");
 	SetRootComponent(rootScene);
 
-	baseMesh = CreateDefaultSubobject<UStaticMeshComponent>("Base Mesh");
+	baseMesh = CreateDefaultSubobject<USkeletalMeshComponent>("Base Mesh");
 	baseMesh->SetupAttachment(RootComponent);
 
 	m_unitStats.health = m_unitStats.maxHealth;
